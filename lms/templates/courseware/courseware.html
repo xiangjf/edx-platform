@@ -137,13 +137,9 @@ ${fragment.foot_html()}
 
           <div class="courseware-content-menu">
               <button type="button" class="content-menu-button list-button is-inactive" aria-pressed="false">
-                  ${_('Outline')}
               </button>
-          </div>
-          <div class="courseware-bookmarks-button" data-bookmarks-api-url="${bookmarks_api_url}">
-              <button type="button" class="bookmarks-list-button is-inactive" aria-pressed="false">
-                  ${_('Bookmarks')}
-              </button>
+              <div class="breadcrumb-label">
+              </div>
           </div>
 
           % if settings.FEATURES.get('ENABLE_COURSEWARE_SEARCH'):
@@ -163,10 +159,15 @@ ${fragment.foot_html()}
             </div>
           % endif
 
+          <div class="courseware-bookmarks-button" data-bookmarks-api-url="${bookmarks_api_url}">
+              <button type="button" class="bookmarks-list-button is-inactive" aria-pressed="false">
+                  ${_('Bookmarks')}
+              </button>
+          </div>
       </div>
 
 % if disable_accordion is UNDEFINED or not disable_accordion:
-    <div class="course-index" style="display:none;">
+    <div class="course-index">
 
       <div class="accordion">
         <nav class="course-navigation" aria-label="${_('Course')}">
@@ -180,7 +181,7 @@ ${fragment.foot_html()}
 
     </div>
 % endif
-    <section class="course-content" id="course-content" role="main" aria-label="Content">
+    <section class="course-content" id="course-content" role="main" aria-label="Content" style="display:none;">
         % if getattr(course, 'entrance_exam_enabled') and \
            getattr(course, 'entrance_exam_minimum_score_pct') and \
            entrance_exam_current_score is not UNDEFINED:

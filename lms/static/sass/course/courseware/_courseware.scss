@@ -106,13 +106,13 @@ html.video-fullscreen {
 
   .course-content,
   .courseware-results-wrapper {
-    padding: $baseline 3%; // percent allows for smaller padding on mobile
     line-height: 1.6;
 
     .xblock {
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        word-break: break-word;
+      margin: $baseline 3%; // percent allows for smaller padding on mobile
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
     }
 
     h1 {
