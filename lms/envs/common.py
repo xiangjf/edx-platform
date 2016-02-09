@@ -1239,9 +1239,6 @@ main_vendor_js = base_vendor_js + [
     'pattern-library/js/modernizr.custom.js',
     'pattern-library/js/afontgarde.js',
     'pattern-library/js/edx-icons.js'
-    'js/vendor/afontgarde/modernizr.fontface-generatedcontent.js',
-    'js/vendor/afontgarde/afontgarde.js',
-    'js/vendor/afontgarde/edx-icons.js',
     'js/vendor/draggabilly.pkgd.js',
 ]
 
