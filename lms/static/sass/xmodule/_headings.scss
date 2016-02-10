@@ -43,7 +43,7 @@ $headings-base-color:                       $gray-d2;
 %hd-3 {
     margin-bottom: ($baseline / 2) !important;
     font-size: 1.6em !important;
-    font-weight: $headings-font-weight-bold !important;
+    font-weight: $headings-font-weight-normal !important;
     line-height: 1.4em !important;
 }
 
@@ -90,11 +90,6 @@ $headings-base-color:                       $gray-d2;
 }
 
 #seq_content {
-
-    h3 {
-        @extend %hd-2;    
-        font-weight: $headings-font-weight-normal !important;
-    }
     
     .hd-1,
     .hd-2,
@@ -116,5 +111,10 @@ $headings-base-color:                       $gray-d2;
         .hd-#{$i} {
             @extend %hd-#{$i};
         }
+    }
+
+    h3 {
+        @extend %hd-2;    
+        font-weight: $headings-font-weight-normal !important;
     }
 }
