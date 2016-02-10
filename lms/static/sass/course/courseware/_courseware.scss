@@ -23,7 +23,7 @@ html.video-fullscreen {
 
   &.studio-view {
     position: relative;
-    top: -($baseline/2);
+    top: ($baseline/4);
     margin: 0;
   }
 
@@ -108,8 +108,11 @@ html.video-fullscreen {
   .courseware-results-wrapper {
     line-height: 1.6;
 
-    .xblock {
+    > .xblock {
       margin: $baseline 3%; // percent allows for smaller padding on mobile
+    }
+
+    .xblock {
       overflow-wrap: break-word;
       word-wrap: break-word;
       word-break: break-word;

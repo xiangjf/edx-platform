@@ -1,5 +1,5 @@
 .wrapper-course-modes {
-  border-bottom: 1px solid $gray-l3;
+  border-bottom: 3px solid $gray-l5;
   padding: ($baseline/2);
 
 
@@ -22,7 +22,7 @@
     // set styles
     @extend %btn-pl-secondary-base;
     @include font-size(13);
-    width: 100%;
+    display: inline-block;
     padding: ($baseline/4) ($baseline/2);
 
     &:before {
@@ -34,6 +34,12 @@
       background-color: lighten($action-primary-bg,10%);
       color: $white;
     }
+  }
+
+  .breadcrumb-label {
+    @extend %t-title7;
+    @include margin-left($baseline/2);
+    display: inline-block;  
   }
 }
 

@@ -121,16 +121,16 @@
 .course-content {
 
    .bookmark-icon.bookmarked {
+    @include left($baseline/4);
     top: -3px;
     position: absolute;
-    left: ($baseline/4);
   }
 
 
   // Rules for bookmark button's different styles
   .bookmark-button-wrapper {
-    text-align: right;
-    margin-bottom: 10px;
+    @include text-align(right);
+    margin: ($baseline/2) 0;
   }
 
   .bookmark-button {
