@@ -64,7 +64,7 @@ def see_a_multi_step_component(step, category):
             assert_in(html_matcher[step_hash['Component']].strip(), actual_html.strip())
         else:
             actual_text = world.css_text(selector, index=idx)
-            assert_in(step_hash['Component'], actual_text.upper())
+            assert_in(step_hash['Component'].upper(), actual_text.upper())
 
 
 @step(u'I see a "([^"]*)" Problem component$')
