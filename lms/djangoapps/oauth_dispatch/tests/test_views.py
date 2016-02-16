@@ -27,8 +27,8 @@ class TestAccessTokenView(TestCase):
         self.dot_app = Application.objects.create(
             user_id=self.user.id,  # pylint: disable=no-member
             redirect_uris='/',
-            client_type='public',
-            authorization_grant_type='password',
+            client_type=Application.CLIENT_PUBLIC,
+            authorization_grant_type=Application.GRANT_PASSWORD,
         )
         self.dop_client = Client.objects.create(
             user_id=self.user.id,  # pylint: disable=no-member
@@ -95,3 +95,94 @@ class TestAccessTokenView(TestCase):
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
         self.assertNotIn('refresh_token', data)
+
+
+@ddt.ddt
+class TestAuthorizationView(TestCase):
+    """
+    Test class for AccessTokenView
+    """
+
+    def setUp(self):
+        super(TestAuthorizationView, self).setUp()
+        self.user = UserFactory()
+        self.dot_app = Application.objects.create(
+            name='Test Application',
+            client_type=Application.CLIENT_CONFIDENTIAL,
+            authorization_grant_type=Application.GRANT_AUTHORIZATION_CODE,
+            user=self.user,  # pylint: disable=no-member
+            redirect_uris='/',
+        )
+        self.dop_client = Client.objects.create(
+            user=self.user,  # pylint: disable=no-member
+            redirect_uri='http://example.edx/redirect',
+            client_type=constants.CONFIDENTIAL,
+        )
+
+    @ddt.data(
+        (views.DOT_BACKEND, 'dot_app'),
+        (views.DOP_BACKEND, 'dop_client'),
+    )
+    @ddt.unpack
+    def test_authorization_view(self, backend, client_attr):
+        client = getattr(self, client_attr)
+        reqfac = RequestFactory()
+        self.client.login(username=self.user.username, password='test')
+        with patch.object(views.AuthorizationView, 'select_backend', return_value=backend):
+            response = self.client.post('/oauth2/authorize/', {
+                'client_id': client.client_id,
+                'response_type': 'code',
+                'state': 'random_state_string',
+                'redirect_uri': 'http://example.edx/redirect',
+            }, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # check form is in context and form params are valid
+        context = response.context  # pylint: disable=no-member
+        self.assertIn('form', context)
+
+    def test_dot_authorization_view(self):
+        self.client.login(username=self.user.username, password='test')
+        with patch.object(views.AuthorizationView, 'select_backend', return_value=views.DOT_BACKEND):
+            response = self.client.post('/oauth2/authorize/', {
+                'client_id': self.dot_app.client_id,
+                'response_type': 'code',
+                'state': 'random_state_string',
+                'redirect_uri': 'http://example.edx/redirect',
+            }, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # check form is in context and form params are valid
+        context = response.context  # pylint: disable=no-member
+
+        self.assertIn('form', context)
+        form = context['form']
+        self.assertEqual(form['redirect_uri'].value(), 'http://example.edx/redirect')
+        self.assertEqual(form['state'].value(), 'random_state_string')
+        self.assertEqual(form['client_id'].value(), self.dot_app.client_id)
+        self.assertFalse(form['allow'].value())
+
+    def test_dop_authorization_view(self):
+        self.client.login(username=self.user.username, password='test')
+        with patch.object(views.AuthorizationView, 'select_backend', return_value=views.DOP_BACKEND):
+            response = self.client.post('/oauth2/authorize/', {
+                'client_id': self.dop_client.client_id,
+                'response_type': 'code',
+                'state': 'random_state_string',
+                'redirect_uri': 'http://example.edx/redirect',
+            }, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # check form is in context and form params are valid
+        context = response.context  # pylint: disable=no-member
+
+        self.assertIn('form', context)
+        form = context['form']
+        self.assertIsNone(form['authorize'].value())
+
+        self.assertIn('oauth_data', context)
+        oauth_data = context['oauth_data']
+        print oauth_data
+        self.assertEqual(oauth_data['redirect_uri'], 'http://example.edx/redirect')
+        self.assertEqual(oauth_data['state'], 'random_state_string')
+        #self.assertEqual(oauth_data['client_id'], self.dot_app.client_id)
