@@ -40,7 +40,6 @@ def _finish_auth_url(params):
 @unittest.skipUnless(settings.ROOT_URLCONF == 'lms.urls', 'Test only valid in lms')
 class LoginFormTest(ThirdPartyAuthTestMixin, UrlResetMixin, ModuleStoreTestCase):
     """Test rendering of the login form. """
-    @patch.dict(settings.FEATURES, {"ENABLE_COMBINED_LOGIN_REGISTRATION": False})
     def setUp(self):
         super(LoginFormTest, self).setUp('lms.urls')
 
@@ -150,7 +149,6 @@ class LoginFormTest(ThirdPartyAuthTestMixin, UrlResetMixin, ModuleStoreTestCase)
 @unittest.skipUnless(settings.ROOT_URLCONF == 'lms.urls', 'Test only valid in lms')
 class RegisterFormTest(ThirdPartyAuthTestMixin, UrlResetMixin, ModuleStoreTestCase):
     """Test rendering of the registration form. """
-    @patch.dict(settings.FEATURES, {"ENABLE_COMBINED_LOGIN_REGISTRATION": False})
     def setUp(self):
         super(RegisterFormTest, self).setUp('lms.urls')
 
