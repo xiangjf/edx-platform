@@ -175,6 +175,10 @@ PROFILE_IMAGE_BACKEND = {
         'base_url': os.path.join(MEDIA_URL, 'profile-images/'),
     },
 }
+
+# Make sure we test with the extended history table
+FEATURES['ENABLE_CSMH_EXTENDED'] = True
+
 #####################################################################
 # Lastly, see if the developer has any local overrides.
 try:
