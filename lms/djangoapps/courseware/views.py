@@ -58,7 +58,8 @@ from courseware.courses import (
 )
 from courseware.masquerade import setup_masquerade
 from courseware.model_data import FieldDataCache, ScoresClient
-from courseware.models import StudentModule, StudentModuleHistory, StudentModuleHistoryExtended
+from courseware.models import StudentModule, StudentModuleHistory
+from coursewarehistoryextended.models import StudentModuleHistoryExtended
 from courseware.url_helpers import get_redirect_url
 from courseware.user_state_client import DjangoXBlockUserStateClient
 from edxmako.shortcuts import render_to_response, render_to_string, marketing_link

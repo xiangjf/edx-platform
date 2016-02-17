@@ -15,7 +15,8 @@ except ImportError:
 import dogstats_wrapper as dog_stats_api
 from django.contrib.auth.models import User
 from xblock.fields import Scope, ScopeBase
-from courseware.models import StudentModule, StudentModuleHistory, StudentModuleHistoryExtended
+from courseware.models import StudentModule, StudentModuleHistory
+from coursewarehistoryextended.models import StudentModuleHistoryExtended
 from edx_user_state_client.interface import XBlockUserStateClient, XBlockUserState
 
 
