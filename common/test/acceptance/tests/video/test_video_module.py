@@ -5,9 +5,12 @@ Acceptance tests for Video.
 """
 import os
 
+from lettuce import world, step
 from mock import patch
 from nose.plugins.attrib import attr
 from unittest import skipIf, skip
+from selenium.webdriver.common.action_chains import ActionChains
+from bok_choy.page_object import PageObject
 from ..helpers import UniqueCourseTest, is_youtube_available, YouTubeStubConfig
 from ...pages.lms.video.video import VideoPage
 from ...pages.lms.tab_nav import TabNavPage
@@ -1192,9 +1195,10 @@ class DragAndDropTest(VideoBaseTest):
     def setUp(self):
         super(DragAndDropTest, self).setUp()
             
-    def ensure_transcript_and_captions_are_present(self):
+    def test_if_captions_are_draggable(self):
         """
         Loads transcripts so that closed-captioning is available.
+        Ensures they are draggable.
         """
         self.assets.append('subs_3_yD_cEKoCk.srt.sjson')
         data = {'sub': '3_yD_cEKoCk'}
@@ -1208,14 +1212,12 @@ class DragAndDropTest(VideoBaseTest):
         self.video.wait_for_closed_captions()
         
         self.assertTrue(self.video.is_closed_captions_visible)
-
-    def drag_and_verify(self, source, xoffset, yoffset):
-        """
-        Attempts to drag the closed captioning container.
-        """
-        source = self.q(css='.closed-captions')
-        action = ActionChains(page.browser)
-        action.drag_and_drop_by_offset(source, 15, 185).perform()
+        
+        captionsContainer = '.closed-captions'
+        captions = self.video.q(css=captionsContainer).results[0]
+        
+        action = ActionChains(self.browser)
+        action.drag_and_drop_by_offset(captions, 15, 185).perform()
 
 
 @attr('a11y')
