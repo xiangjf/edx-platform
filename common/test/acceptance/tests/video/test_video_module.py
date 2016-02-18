@@ -1184,6 +1184,40 @@ class YouTubeQualityTest(VideoBaseTest):
         self.video.wait_for(lambda: self.video.is_quality_button_active, 'waiting for quality button activation')
 
 
+@attr('shard_4')
+class DragAndDropTest(VideoBaseTest):
+    """
+    Tests draggability of closed captions within videos.
+    """
+    def setUp(self):
+        super(DragAndDropTest, self).setUp()
+            
+    def ensure_transcript_and_captions_are_present(self):
+        """
+        Loads transcripts so that closed-captioning is available.
+        """
+        self.assets.append('subs_3_yD_cEKoCk.srt.sjson')
+        data = {'sub': '3_yD_cEKoCk'}
+        
+        self.metadata = self.metadata_for_mode('html5', additional_data=data)
+        
+        self.navigate_to_video()
+        
+        self.video.show_closed_captions()
+        
+        self.video.wait_for_closed_captions()
+        
+        self.assertTrue(self.video.is_closed_captions_visible)
+
+    def drag_and_verify(self, source, xoffset, yoffset):
+        """
+        Attempts to drag the closed captioning container.
+        """
+        source = self.q(css='.closed-captions')
+        action = ActionChains(page.browser)
+        action.drag_and_drop_by_offset(source, 15, 185).perform()
+
+
 @attr('a11y')
 class LMSVideoModuleA11yTest(VideoBaseTest):
     """
