@@ -303,7 +303,7 @@ class CourseFields(object):
         scope=Scope.settings, default=False,
         help=_(
             "Enter true or false. If true, discussion categories and subcategories are sorted alphabetically. "
-            "If false, they are sorted chronologically."
+            "If false, they are sorted in chronological order of creation."
         )
     )
     announcement = Date(
