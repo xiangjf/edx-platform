@@ -91,6 +91,10 @@
     </div>
     % endif
 
+    <section class="category">
+      <%include file="category_icons.html" />
+    </section>
+
     <section class="courses${'' if course_discovery_enabled else ' no-course-discovery'}">
       <ul class="courses-listing">
         %for course in courses:

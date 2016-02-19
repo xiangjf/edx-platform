@@ -21,6 +21,7 @@ from edxmako.shortcuts import marketing_link
 from util.cache import cache_if_anonymous
 from util.json_request import JsonResponse
 import branding.api as branding_api
+from category.views import category as category_operation
 
 
 log = logging.getLogger(__name__)
@@ -114,6 +115,26 @@ def courses(request):
     #  we do not expect this case to be reached in cases where
     #  marketing is enabled or the courses are not browsable
     return courseware.views.courses(request)
+
+
+@ensure_csrf_cookie
+@cache_if_anonymous()
+def category(request, category_code):
+
+    enable_mktg_site = microsite.get_value(
+        'ENABLE_MKTG_SITE',
+        settings.FEATURES.get('ENABLE_MKTG_SITE', False)
+    )
+
+    if enable_mktg_site:
+        return redirect(marketing_link('CATEGORY'), permanent=True)
+
+    if not settings.FEATURES.get('COURSES_ARE_BROWSABLE'):
+        raise Http404
+
+    #  we do not expect this case to be reached in cases where
+    #  marketing is enabled or the courses are not browsable
+    return category_operation(request, category_code)
 
 
 def _footer_static_url(request, name):

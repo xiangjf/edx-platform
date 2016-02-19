@@ -62,6 +62,10 @@ from microsite_configuration import microsite
   <section class="courses-container">
     <section class="highlighted-courses">
 
+        <section class="category">
+            <%include file="category_icons.html" />
+        </section>
+
       % if settings.FEATURES.get('COURSES_ARE_BROWSABLE'):
         <section class="courses">
             <ul class="courses-listing">
