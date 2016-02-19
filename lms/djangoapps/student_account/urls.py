@@ -9,6 +9,9 @@ if settings.FEATURES.get('ENABLE_COMBINED_LOGIN_REGISTRATION'):
         url(r'^login/$', 'login_and_registration_form', {'initial_mode': 'login'}, name='account_login'),
         url(r'^register/$', 'login_and_registration_form', {'initial_mode': 'register'}, name='account_register'),
         url(r'^password$', 'password_change_request_handler', name='password_change_request'),
+        #syw
+        url(r'^sslogin/$', 'login_and_registration_form', {'initial_mode': 'ssologin'}, name='account_ssologin'),
+        #syw
     )
 
 urlpatterns += patterns(

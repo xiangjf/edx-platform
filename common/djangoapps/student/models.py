@@ -343,6 +343,32 @@ class UserProfile(models.Model):
         return date.year - year_of_birth <= age_limit    # pylint: disable=maybe-no-member
 
 
+#syw
+class SsoUser(models.Model):
+    class Meta:
+        db_table = "auth_ssouser"
+    mail = models.CharField(max_length=100)
+    sn = models.CharField(max_length=100)
+    manager = models.CharField(max_length=100)
+    useraccountcontrol = models.CharField(max_length=100)
+    department = models.CharField(max_length=100)
+    givenname = models.CharField(max_length=100)
+    telephonenumber = models.CharField(max_length=100)
+    distinguishedname = models.CharField(max_length=100)
+    employeenumber = models.CharField(max_length=100)
+    cn = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    departmentnumber = models.CharField(max_length=100)
+    samaccountname = models.CharField(max_length=100)
+    inetuserstatus = models.CharField(max_length=100)
+    dn = models.CharField(max_length=100)
+    userprincipalname = models.CharField(max_length=100)
+    objectclass = models.CharField(max_length=100)
+    displayname = models.CharField(max_length=100)
+
+#syw
+
+
 @receiver(pre_save, sender=UserProfile)
 def user_profile_pre_save_callback(sender, **kwargs):
     """

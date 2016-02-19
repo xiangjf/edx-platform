@@ -598,7 +598,7 @@ def dashboard(request):
     )
 
     # Verification Attempts
-    # Used to generate the "you must reverify for course x" banner
+    # Used to generate the "you must reverify for course x" bannerr
     verification_status, verification_msg = SoftwareSecurePhotoVerification.user_status(user)
 
     # Gets data for midcourse reverifications, if any are necessary or have failed
@@ -1122,6 +1122,13 @@ def login_user(request, error=""):  # pylint: disable-msg=too-many-statements,un
                 "success": False,
                 "value": _('Too many failed login attempts. Try again later.'),
             })  # TODO: this should be status code 429  # pylint: disable=fixme
+        #syw
+        except ValueError:
+            return JsonResponse({
+                "success": False,
+                "value": _('click [Forgot password?] to set your password before sign in.'),
+            })
+        #syw
 
     if user is None:
         # tick the failed login counters if the user exists in the database
@@ -1261,6 +1268,16 @@ def logout_user(request):
     response = redirect(target)
 
     delete_logged_in_cookies(response)
+
+
+    #syw
+    from student_account import commonutils
+    #delete cookie in .fujitsu.com
+    cookieNameForToken = commonutils.getCookieNameForToken()
+    response.delete_cookie(cookieNameForToken, path='/', domain='.fujitsu.com')
+    #syw
+
+
     return response
 
 

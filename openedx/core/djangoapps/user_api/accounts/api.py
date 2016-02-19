@@ -238,7 +238,6 @@ def update_account_settings(requesting_user, update, username=None):
                 user_message=err.message
             )
 
-
 def _get_user_and_profile(username):
     """
     Helper method to return the legacy user and profile objects based on username.

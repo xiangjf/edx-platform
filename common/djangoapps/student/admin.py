@@ -132,6 +132,16 @@ class LinkedInAddToProfileConfigurationAdmin(admin.ModelAdmin):
 
 admin.site.register(UserProfile)
 
+# syw
+
+from .models import SsoUser
+
+
+class SsoUserAdmin(admin.ModelAdmin):
+    list_display = ('employeenumber', 'mail', 'sn', 'givenname')
+admin.site.register(SsoUser, SsoUserAdmin)
+#syw
+
 admin.site.register(UserTestGroup)
 
 admin.site.register(CourseEnrollment)

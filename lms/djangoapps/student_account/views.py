@@ -62,6 +62,178 @@ def login_and_registration_form(request, initial_mode="login"):
     if request.user.is_authenticated():
         return redirect(redirect_to)
 
+    if initial_mode == "ssologin":
+        #syw
+        import sys;
+        reload(sys);
+        sys.setdefaultencoding("utf8")
+
+        from django.http import HttpResponseRedirect
+        from django.contrib.auth import login
+        from django.contrib.auth.models import User
+        from django.db import transaction
+        from student.models import SsoUser
+        import commonutils
+
+        tokenid = commonutils.getTokenInCookie(request)
+
+        if tokenid:
+            tokenValid = commonutils.isTokenValid(tokenid)
+            if tokenValid:
+                #get sso email and other infomation
+                ssomail = commonutils.getmail(tokenid)
+                ssosn = commonutils.getsn(tokenid)
+                ssomanager = commonutils.getmanager(tokenid)
+                ssouseraccountcontrol = commonutils.getuseraccountcontrol(tokenid)
+                ssodepartment = commonutils.getdepartment(tokenid)
+                ssogivenname = commonutils.getgivenname(tokenid)
+                ssotelephonenumber = commonutils.gettelephonenumber(tokenid)
+                ssodistinguishedname = commonutils.getdistinguishedname(tokenid)
+                ssoemployeenumber = commonutils.getemployeenumber(tokenid)
+                ssocn = commonutils.getcn(tokenid)
+                ssoname = commonutils.getname(tokenid)
+                ssodepartmentnumber = commonutils.getdepartmentnumber(tokenid)
+                ssosamaccountname = commonutils.getsamaccountname(tokenid)
+                ssoinetuserstatus = commonutils.getinetuserstatus(tokenid)
+                ssodn = commonutils.getdn(tokenid)
+                ssouserprincipalname = commonutils.getuserprincipalname(tokenid)
+                ssoobjectclass = commonutils.getobjectclass(tokenid)
+                ssodisplayname = commonutils.getdisplayname(tokenid)
+
+                username = ssoemployeenumber
+                fullname = ssosn + ssogivenname
+                user = None
+
+                try:
+                    user = User.objects.get(email=ssomail)
+                except User.DoesNotExist as e:
+                    print e
+
+                #if user exsits, update user, user profile and sso user
+                if user:
+                    with transaction.commit_on_success():
+                        #update user
+                        user.username = username
+                        user.is_active = True
+                        user.save()
+
+                        #update user profile
+                        try:
+                            userprofile = UserProfile.objects.get(user=user)
+                        except Exception as e:
+                            print e
+                        if userprofile:
+                            userprofile.name = fullname
+                            userprofile.save()
+
+
+                        #update sso user
+                        ssouser = None
+                        try:
+                            ssouser = SsoUser.objects.get(mail=ssomail)
+                        except Exception as e:
+                            print e
+                        if ssouser:
+                            ssouser.sn=ssosn
+                            ssouser.manager=ssomanager
+                            ssouser.useraccountcontrol=ssouseraccountcontrol
+                            ssouser.department=ssodepartment
+                            ssouser.givenname=ssogivenname
+                            ssouser.telephonenumber=ssotelephonenumber
+                            ssouser.distinguishedname=ssodistinguishedname
+                            ssouser.employeenumber=ssoemployeenumber
+                            ssouser.cn=ssocn
+                            ssouser.name=ssoname
+                            ssouser.departmentnumber=ssodepartmentnumber
+                            ssouser.samaccountname=ssosamaccountname
+                            ssouser.inetuserstatus=ssoinetuserstatus
+                            ssouser.dn=ssodn
+                            ssouser.userprincipalname=ssouserprincipalname
+                            ssouser.objectclass=ssoobjectclass
+                            ssouser.displayname=ssodisplayname
+                        else:
+                            ssouser = SsoUser(
+                                mail=ssomail,
+                                sn=ssosn,
+                                manager=ssomanager,
+                                useraccountcontrol=ssouseraccountcontrol,
+                                department=ssodepartment,
+                                givenname=ssogivenname,
+                                telephonenumber=ssotelephonenumber,
+                                distinguishedname=ssodistinguishedname,
+                                employeenumber=ssoemployeenumber,
+                                cn=ssocn,
+                                name=ssoname,
+                                departmentnumber=ssodepartmentnumber,
+                                samaccountname=ssosamaccountname,
+                                inetuserstatus=ssoinetuserstatus,
+                                dn=ssodn,
+                                userprincipalname=ssouserprincipalname,
+                                objectclass=ssoobjectclass,
+                                displayname=ssodisplayname,
+                            )
+                        ssouser.save()
+
+                #if user does not exsits, create auth user, user profile and sso user
+                else:
+                    with transaction.commit_on_success():
+                        #create auth user
+                        user = User(
+                            username=username,
+                            email=ssomail,
+                            is_active=True,
+                        )
+                        user.save()
+
+
+                        #create user profile
+                        profile = UserProfile(
+                            user=user,
+                            name=fullname,
+                        )
+                        try:
+                            profile.save()
+                        except Exception as e:
+                            print e
+
+                        #create sso user
+                        ssouser = SsoUser(
+                            mail=ssomail,
+                            sn=ssosn,
+                            manager=ssomanager,
+                            useraccountcontrol=ssouseraccountcontrol,
+                            department=ssodepartment,
+                            givenname=ssogivenname,
+                            telephonenumber=ssotelephonenumber,
+                            distinguishedname=ssodistinguishedname,
+                            employeenumber=ssoemployeenumber,
+                            cn=ssocn,
+                            name=ssoname,
+                            departmentnumber=ssodepartmentnumber,
+                            samaccountname=ssosamaccountname,
+                            inetuserstatus=ssoinetuserstatus,
+                            dn=ssodn,
+                            userprincipalname=ssouserprincipalname,
+                            objectclass=ssoobjectclass,
+                            displayname=ssodisplayname,
+                        )
+                        try:
+                            ssouser.save()
+                        except Exception as e:
+                            print e
+
+                #login user
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                login(request, user)
+                request.user.authenticated = True
+                return redirect(redirect_to)
+            else:
+                return HttpResponseRedirect(commonutils.loginUrl)
+        else:
+            return HttpResponseRedirect(commonutils.loginUrl)
+        #syw
+
+
     # Retrieve the form descriptions from the user API
     form_descriptions = _get_form_descriptions(request)
 
@@ -71,9 +243,10 @@ def login_and_registration_form(request, initial_mode="login"):
         if initial_mode == "login":
             return old_login_view(request)
         elif initial_mode == "register":
-            return old_register_view(request)
+            pass
 
-    # Allow external auth to intercept and handle the request
+        return old_register_view(request)
+# Allow external auth to intercept and handle the request
     ext_auth_response = _external_auth_intercept(request, initial_mode)
     if ext_auth_response is not None:
         return ext_auth_response

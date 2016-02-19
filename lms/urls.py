@@ -102,6 +102,10 @@ if settings.FEATURES["ENABLE_COMBINED_LOGIN_REGISTRATION"]:
             {'initial_mode': 'register'}, name="register_user"),
         url(r'^accounts/login$', 'student_account.views.login_and_registration_form',
             {'initial_mode': 'login'}, name="accounts_login"),
+        #syw
+        url(r'^ssologin$', 'student_account.views.login_and_registration_form',
+            {'initial_mode': 'ssologin'}, name="ssosignin_user"),
+        #syw
     )
 else:
     # Serve the old views
