@@ -3,7 +3,7 @@ import httplib
 import xml.etree.ElementTree as ET
 
 
-loginUrl = 'https://am.fnst.cn.fujitsu.com/amauth?goto=http://syw.fnst.cn.fujitsu.com:8000/ssologin'
+loginUrl = 'https://am.fnst.cn.fujitsu.com/amauth?goto=http://mooc.fnst.cn.fujitsu.com/ssologin'
 fnstssourl = 'sso.fnst.cn.fujitsu.com'
 cookieNameForTokenXMLUrl = '/fnstsso/identity/xml/getCookieNameForToken'
 tokenValidXMLUrl = '/fnstsso/identity/xml/isTokenValid?tokenid='
