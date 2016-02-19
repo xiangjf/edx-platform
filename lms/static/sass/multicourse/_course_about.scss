@@ -5,17 +5,17 @@
 
   header.course-profile {
     background: $course-profile-bg;
-    background-image: $homepage-bg-image;
-    background-size: cover;
-    box-shadow: 0 1px 80px 0 rgba(0,0,0, 0.5);
-    border-bottom: 1px solid $border-color-3;
-    box-shadow: inset 0 1px 5px 0 $shadow-l1;
-    height: 280px;
+    background-image: $homepage-bg-image, linear-gradient(#3598D3 10%, #3699D3 80%, #FFFFFF 100%);
+    background-size: contain;
+    // border-bottom: 1px solid $border-color-3;
+    // box-shadow: inset 0 -1px 8px 0 rgba(0,0,0, 0.2), inset 0 1px 12px 0 rgba(0,0,0, 0.3);
+    height: 250px;
     margin-top: $header_image_margin;
     padding-top: 150px;
     overflow: hidden;
     position: relative;
-    width: 100%;
+    width: 1423px;
+    margin: 0 auto;
 
     .intro-inner-wrapper {
       background: $course-header-bg;
@@ -23,7 +23,7 @@
       box-shadow: 0 4px 25px 0 rgba(0,0,0, 0.5);
       @include box-sizing(border-box);
       @include clearfix();
-      margin: 0 auto;
+      margin: -50px auto;
       max-width: 1200px;
       min-width: 760px;
       position: relative;
