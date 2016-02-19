@@ -1274,7 +1274,8 @@ def logout_user(request):
     from student_account import commonutils
     #delete cookie in .fujitsu.com
     cookieNameForToken = commonutils.getCookieNameForToken()
-    response.delete_cookie(cookieNameForToken, path='/', domain='.fujitsu.com')
+    if cookieNameForToken:
+        response.delete_cookie(cookieNameForToken, path='/', domain='.fujitsu.com')
     #syw
 
 
