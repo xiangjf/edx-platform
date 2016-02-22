@@ -7,11 +7,11 @@ from microsite_configuration import microsite
 %>
 
 <section class="home">
-  <header style="background-image: url(${category_bg_url})">
-    <div class="outer-wrapper">
-      <div class="title">
+  <header style="background-image: url(${category_bg_url}); background-size: cover; width: initial; height: 150px;">
+    <div class="outer-wrapper" style="padding: 10px 10px;">
+      <div class="title" style="background-image: initial;">
         <hgroup>
-              <h1>${category_name}</h1>
+              <h1 style="margin: 20px 110px 0;">${category_name}</h1>
         </hgroup>
       </div>
     </div>
@@ -21,6 +21,14 @@ from microsite_configuration import microsite
   % if settings.FEATURES.get('COURSES_ARE_BROWSABLE'):
     <section class="courses">
         <ul class="courses-listing">
+        % if len(courses) == 0:
+          <div>
+              <section>
+                  <h2 style="text-align: center;">该分类中暂无课程。</h2>
+              </section>
+          </div>
+        % endif
+
         %for course in courses:
           <li class="courses-listing-item">
             <%include file="course.html" args="course=course" />
